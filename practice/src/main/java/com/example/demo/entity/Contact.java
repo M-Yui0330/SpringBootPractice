@@ -45,4 +45,21 @@ public class Contact {
 	
 	@Column(name = "body", nullable = false)
 	private String body;
+	
+	@Column(name = "created_at")
+	private java.time.LocalDateTime createdAt;
+	
+	@Column(name = "updated_at")
+	private java.time.LocalDateTime updatedAt;
+	
+	@jakarta.persistence.PrePersist
+	public void onPrePersist() {
+		this.createdAt = java.time.LocalDateTime.now();
+		this.updatedAt = java.time.LocalDateTime.now();
+	}
+	
+	@jakarta.persistence.PreUpdate
+	public void onPreUpdate() {
+		this.updatedAt = java.time.LocalDateTime.now();
+	}
 }
