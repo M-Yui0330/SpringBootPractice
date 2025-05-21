@@ -3,10 +3,12 @@ package com.example.demo.controller;
 import java.util.Optional;
 
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -118,10 +120,21 @@ public class AdminController {
 	 }
 	 
 	 @PostMapping("/admin/contacts/{id}/edit")
-	 public String updateContact(@PathVariable("id") Long id, @ModelAttribute Contact contactForm, HttpSession session) {
+	 public String updateContact (
+		 @PathVariable("id") Long id,
+		 @ModelAttribute("contact") @Valid Contact contactForm,
+		 BindingResult result,
+		 Model model,
+		 HttpSession session
+	 ) {
 		 Admin admin = (Admin) session.getAttribute("admin");
 		 if (admin == null) {
 			 return "redirect:/admin/signin";
+		 }
+		 
+		 if (result.hasErrors()) {
+			 model.addAttribute("contact", contactForm);
+			 return "admin/edit";
 		 }
 		 
 		 Optional<Contact> contactOptional = contactRepository.findById(id);
