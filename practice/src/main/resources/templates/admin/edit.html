@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>お問い合わせ編集</title>
+</head>
+<body>
+  <h1>お問い合わせ編集</h1>
+
+  <form th:action="@{/admin/contacts/{id}/edit(id=${contact.id})}" th:object="${contact}" method="post">
+    
+    <div th:if="${#fields.hasErrors('*')}">
+      <ul>
+        <li th:each="err : ${#fields.errors('*')}" th:text="${err}"></li>
+      </ul>
+    </div>
+
+    <table border="1">
+      <tr><th>ID</th><td th:text="*{id}"></td></tr>
+      <tr><th>姓</th><td><input type="text" th:field="*{lastName}" /></td></tr>
+      <tr><th>名</th><td><input type="text" th:field="*{firstName}" /></td></tr>
+      <tr><th>メールアドレス</th><td><input type="email" th:field="*{email}" /></td></tr>
+      <tr><th>電話番号</th><td><input type="text" th:field="*{phone}" /></td></tr>
+      <tr><th>郵便番号</th><td><input type="text" th:field="*{zipCode}" /></td></tr>
+      <tr><th>住所</th><td><input type="text" th:field="*{address}" /></td></tr>
+      <tr><th>建物名</th><td><input type="text" th:field="*{buildingName}" /></td></tr>
+      <tr><th>お問い合わせ種別</th><td><input type="text" th:field="*{contactType}" /></td></tr>
+      <tr><th>内容</th><td><textarea th:field="*{body}"></textarea></td></tr>
+    </table>
+
+    <br>
+    <button type="submit">更新</button>
+  </form>
+
+  <form th:action="@{'/admin/contacts/' + ${contact.id} + '/delete'}" method="post" onsubmit="return confirm('本当に削除しますか？');">
+    <button type="submit">削除</button>
+  </form>
+
+  <form th:action="@{/admin/signout}" method="post">
+    <button type="submit">ログアウト</button>
+  </form>
+</body>
+</html>
